@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-indigo-600 to-purple-700 text-white">
+    <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <div class="flex items-center space-x-2 mb-4">
+                    <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">{{ course.category or 'General' }}</span>
+                    <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">{{ course.level }}</span>
+                    {% if course.price == 0 %}
+                    <span class="bg-green-400 text-green-900 text-xs px-3 py-1 rounded-full font-semibold">Gratuit</span>
+                    {% endif %}
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ course.title }}</h1>
+                <p class="text-indigo-200 text-lg mb-6">{{ course.short_description }}</p>
+                <div class="flex flex-wrap items-center gap-4 text-sm text-indigo-200">
+                    <span><i class="fas fa-user"></i> {{ course.instructor }}</span>
+                    <span><i class="fas fa-file-video"></i> {{ course.lessons|length }} leçons</span>
+                    <span><i class="fas fa-users"></i> {{ course.enrollments|length }} inscrits</span>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-6 text-gray-900">
+                {% if course.price > 0 %}
+                <p class="text-3xl font-bold mb-4">{{ course.price }}dt</p>
+                {% else %}
+                <p class="text-3xl font-bold text-green-600 mb-4">Gratuit</p>
+                {% endif %}
+                <ul class="space-y-2 text-sm mb-6">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i> Accès illimité</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i> {{ course.lessons|length }} leçons vidéo</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i> Certificat de fin</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i> Apprentissage à votre rythme</li>
+                </ul>
+                {% if current_user.is_authenticated %}
+                    {% if enrolled %}
+                    <a href="{{ url_for('lesson_view', slug=course.slug, lesson_slug=course.lessons[0].slug) if course.lessons else '#' }}" class="block text-center bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 {{ 'opacity-50 cursor-not-allowed' if not course.lessons }}">
+                        <i class="fas fa-play mr-2"></i>Continuer l'apprentissage
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('enroll', course_id=course.id) }}" class="block text-center bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700">S'inscrire maintenant</a>
+                    {% endif %}
+                {% else %}
+                <a href="{{ url_for('login') }}" class="block text-center bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700">Connectez-vous pour vous inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Description</h2>
+            <div class="prose max-w-none text-gray-600">{{ course.description|safe }}</div>
+        </div>
+        <div>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Programme du cours</h2>
+            <div class="space-y-2">
+                {% for lesson in course.lessons|sort(attribute='order') %}
+                <div class="bg-white border border-gray-200 rounded-lg p-4 {% if lesson.is_free %}border-green-200 bg-green-50{% endif %}">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-play-circle text-indigo-600 mt-1"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-900 text-sm">{{ lesson.title }}</h4>
+                                <p class="text-xs text-gray-500 mt-1"><i class="far fa-clock"></i> {{ lesson.duration }}</p>
+                            </div>
+                        </div>
+                        {% if lesson.is_free %}
+                        <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Gratuit</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{% if lesson %}Modifier{% else %}Ajouter{% endif %} une leçon{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <a href="{{ url_for('admin_dashboard') }}" class="text-indigo-600 hover:text-indigo-700 mb-4 inline-block"><i class="fas fa-arrow-left mr-2"></i>Retour à l'administration</a>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">{% if lesson %}Modifier la leçon{% else %}Ajouter une leçon{% endif %}</h1>
+        <p class="text-gray-500 mb-6">Cours : <strong>{{ course.title }}</strong></p>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
+                <input type="text" name="title" value="{{ lesson.title if lesson else '' }}" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de la vidéo (iframe/YouTube)</label>
+                    <input type="text" name="video_url" value="{{ lesson.video_url if lesson else '' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Durée (HH:MM)</label>
+                    <input type="text" name="duration" value="{{ lesson.duration if lesson else '00:00' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Contenu (HTML)</label>
+                <textarea name="content" rows="10" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono text-sm">{{ lesson.content if lesson else '' }}</textarea>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" name="is_free" id="is_free" {% if lesson and lesson.is_free %}checked{% endif %} class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                <label for="is_free" class="ml-2 text-sm text-gray-700">Leçon gratuite (accessible sans inscription)</label>
+            </div>
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700">
+                {% if lesson %}Mettre à jour{% else %}Ajouter la leçon{% endif %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

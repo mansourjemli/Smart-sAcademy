@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{% if course %}Modifier{% else %}Ajouter{% endif %} un cours{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <a href="{{ url_for('admin_dashboard') }}" class="text-indigo-600 hover:text-indigo-700 mb-4 inline-block"><i class="fas fa-arrow-left mr-2"></i>Retour à l'administration</a>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">{% if course %}Modifier le cours{% else %}Ajouter un nouveau cours{% endif %}</h1>
+        <form method="POST" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
+                    <input type="text" name="title" value="{{ course.title if course else '' }}" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                    <select name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Sélectionner...</option>
+                        <option value="Développement Web" {% if course and course.category == 'Développement Web' %}selected{% endif %}>Développement Web</option>
+                        <option value="Data Science" {% if course and course.category == 'Data Science' %}selected{% endif %}>Data Science</option>
+                        <option value="Design" {% if course and course.category == 'Design' %}selected{% endif %}>Design</option>
+                        <option value="Marketing" {% if course and course.category == 'Marketing' %}selected{% endif %}>Marketing</option>
+                        <option value="Business" {% if course and course.category == 'Business' %}selected{% endif %}>Business</option>
+                        <option value="Mobile" {% if course and course.category == 'Mobile' %}selected{% endif %}>Mobile</option>
+                        <option value="DevOps" {% if course and course.category == 'DevOps' %}selected{% endif %}>DevOps</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
+                    <select name="level" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="Débutant" {% if course and course.level == 'Débutant' %}selected{% endif %}>Débutant</option>
+                        <option value="Intermédiaire" {% if course and course.level == 'Intermédiaire' %}selected{% endif %}>Intermédiaire</option>
+                        <option value="Avancé" {% if course and course.level == 'Avancé' %}selected{% endif %}>Avancé</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Prix (dt)</label>
+                    <input type="number" step="0.01" name="price" value="{{ course.price if course else '0' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Formateur</label>
+                    <input type="text" name="instructor" value="{{ course.instructor if course else 'Formateur' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de l'image</label>
+                    <input type="url" name="image_url" value="{{ course.image_url if course else '' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description courte</label>
+                <input type="text" name="short_description" value="{{ course.short_description if course else '' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description complète</label>
+                <textarea name="description" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">{{ course.description if course else '' }}</textarea>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" name="is_published" id="is_published" {% if course and course.is_published %}checked{% endif %} class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                <label for="is_published" class="ml-2 text-sm text-gray-700">Publier le cours</label>
+            </div>
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700">
+                {% if course %}Mettre à jour{% else %}Créer le cours{% endif %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

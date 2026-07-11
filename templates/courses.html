@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Cours{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Tous les cours</h1>
+        <p class="text-gray-500 mt-2">Explorez notre catalogue de formations</p>
+    </div>
+
+    <form method="GET" class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" name="search" placeholder="Rechercher un cours..." value="{{ request.args.get('search', '') }}" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                <option value="">Toutes les catégories</option>
+                {% for cat in categories %}
+                <option value="{{ cat }}" {% if request.args.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+            <select name="level" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                <option value="">Tous les niveaux</option>
+                <option value="Débutant" {% if request.args.get('level') == 'Débutant' %}selected{% endif %}>Débutant</option>
+                <option value="Intermédiaire" {% if request.args.get('level') == 'Intermédiaire' %}selected{% endif %}>Intermédiaire</option>
+                <option value="Avancé" {% if request.args.get('level') == 'Avancé' %}selected{% endif %}>Avancé</option>
+            </select>
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Filtrer</button>
+        </div>
+    </form>
+
+    {% if courses %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for course in courses %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <img src="{{ course.image_url }}" alt="{{ course.title }}" class="w-full h-48 object-cover">
+            <div class="p-5">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full">{{ course.category or 'General' }}</span>
+                    <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">{{ course.level }}</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ course.title }}</h3>
+                <p class="text-sm text-gray-500 mb-4">{{ course.short_description or course.description[:100] ~ '...' }}</p>
+                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                    <span><i class="fas fa-user"></i> {{ course.instructor }}</span>
+                    <span><i class="fas fa-file-video"></i> {{ course.lessons|length }} leçons</span>
+                    <span><i class="fas fa-users"></i> {{ course.enrollments|length }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xl font-bold text-indigo-600">
+                        {% if course.price > 0 %}{{ course.price }}dt{% else %}Gratuit{% endif %}
+                    </span>
+                    <a href="{{ url_for('course_detail', slug=course.slug) }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">Voir le cours</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16">
+        <i class="fas fa-search text-5xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600">Aucun cours trouvé</h3>
+        <p class="text-gray-400">Essayez de modifier vos filtres de recherche.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

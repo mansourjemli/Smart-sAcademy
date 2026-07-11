@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Tableau de Bord{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Bonjour, {{ current_user.username }} !</h1>
+        <p class="text-gray-500 mt-2">Voici vos cours et votre progression.</p>
+    </div>
+
+    {% if enrollments %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for enrollment in enrollments %}
+        {% set course = enrollment.course %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <img src="{{ course.image_url }}" alt="{{ course.title }}" class="w-full h-40 object-cover">
+            <div class="p-5">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ course.title }}</h3>
+                <p class="text-sm text-gray-500 mb-3">{{ course.instructor }}</p>
+                {% set total = course.lessons|length %}
+                {% if total > 0 %}
+                    {% set done = namespace(val=0) %}
+                    {% for lesson in course.lessons %}
+                        {% for p in lesson.progress %}
+                            {% if p.student_id == current_user.id and p.completed %}
+                                {% set done.val = done.val + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <div class="mb-2">
+                        <div class="flex justify-between text-sm text-gray-500 mb-1">
+                            <span>Progression</span>
+                            <span>{{ done.val }}/{{ total }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-indigo-600 h-2 rounded-full" style="width: {{ (done.val / total * 100)|int if total > 0 else 0 }}%"></div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if enrollment.completed %}
+                <div class="bg-green-50 text-green-700 text-sm px-3 py-2 rounded-lg text-center font-medium mb-3"><i class="fas fa-certificate mr-1"></i> Terminé</div>
+                {% endif %}
+                <a href="{{ url_for('course_detail', slug=course.slug) }}" class="block text-center bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">Accéder au cours</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16 bg-white rounded-xl shadow-sm">
+        <i class="fas fa-book-open text-5xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600">Aucun cours pour le moment</h3>
+        <p class="text-gray-400 mb-6">Commencez par explorer notre catalogue de formations.</p>
+        <a href="{{ url_for('courses') }}" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700">Explorer les cours</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

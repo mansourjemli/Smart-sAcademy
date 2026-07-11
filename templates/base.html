@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-Learning{% endblock %} | LearnHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .progress-bar { transition: width 0.5s ease; }
+        .lesson-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .lesson-content h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .lesson-content p { margin-bottom: 1rem; line-height: 1.75; }
+        .lesson-content ul, .lesson-content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+        .lesson-content li { margin-bottom: 0.25rem; }
+        .lesson-content pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+        .lesson-content code { background: #f1f5f9; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; }
+        .lesson-content pre code { background: none; padding: 0; }
+        .lesson-content img { max-width: 100%; border-radius: 0.5rem; margin: 1rem 0; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                        <i class="fas fa-graduation-cap text-2xl text-indigo-600"></i>
+                        <span class="text-xl font-bold text-gray-900">Smart'sAcademy</span>
+                    </a>
+                    <div class="hidden md:flex ml-10 space-x-8">
+                        <a href="{{ url_for('index') }}" class="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Accueil</a>
+                        <a href="{{ url_for('courses') }}" class="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Cours</a>
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard') }}" class="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Mon Tableau de Bord</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="text-sm text-gray-600 hover:text-indigo-600"><i class="fas fa-cog"></i> Admin</a>
+                        {% endif %}
+                        <div class="relative group">
+                            <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-indigo-600">
+                                <i class="fas fa-user-circle text-xl"></i>
+                                <span>{{ current_user.username }}</span>
+                            </button>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="text-gray-600 hover:text-indigo-600 text-sm font-medium">Connexion</a>
+                        <a href="{{ url_for('register') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 mt-4">
+        {% for category, message in messages %}
+        <div class="p-4 rounded-lg text-sm font-medium {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% elif category == 'warning' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %} flex items-center justify-between">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" class="text-current opacity-50 hover:opacity-100">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">LearnHub</h3>
+                    <p class="mt-2 text-sm text-gray-500">Plateforme de formation en ligne pour apprendre à votre rythme.</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Cours</h3>
+                    <ul class="mt-2 space-y-1">
+                        {% for cat in categories %}
+                        <li><a href="{{ url_for('courses', category=cat) }}" class="text-sm text-gray-500 hover:text-indigo-600">{{ cat }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Liens</h3>
+                    <ul class="mt-2 space-y-1">
+                        <li><a href="{{ url_for('index') }}" class="text-sm text-gray-500 hover:text-indigo-600">Accueil</a></li>
+                        <li><a href="{{ url_for('courses') }}" class="text-sm text-gray-500 hover:text-indigo-600">Tous les cours</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Contact</h3>
+                    <p class="mt-2 text-sm text-gray-500">mansourjemli@gmail.com</p>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-200 pt-4 text-center">
+                <p class="text-sm text-gray-400">&copy; 2024 LearnHub. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

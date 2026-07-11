@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Gestion des utilisateurs{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <a href="{{ url_for('admin_dashboard') }}" class="text-indigo-600 hover:text-indigo-700 mb-4 inline-block"><i class="fas fa-arrow-left mr-2"></i>Retour à l'administration</a>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Utilisateurs inscrits</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="text-left px-4 py-3 text-sm font-medium text-gray-500">ID</th>
+                        <th class="text-left px-4 py-3 text-sm font-medium text-gray-500">Nom d'utilisateur</th>
+                        <th class="text-left px-4 py-3 text-sm font-medium text-gray-500">Email</th>
+                        <th class="text-left px-4 py-3 text-sm font-medium text-gray-500">Admin</th>
+                        <th class="text-left px-4 py-3 text-sm font-medium text-gray-500">Inscrit le</th>
+                        <th class="text-left px-4 py-3 text-sm font-medium text-gray-500">Cours</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for user in users %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ user.id }}</td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ user.username }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ user.email }}</td>
+                        <td class="px-4 py-3">{% if user.is_admin %}<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Oui</span>{% else %}<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">Non</span>{% endif %}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ user.enrollments|length }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
