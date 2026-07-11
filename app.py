@@ -298,16 +298,17 @@ def admin_users():
     users = User.query.order_by(User.created_at.desc()).all()
     return render_template('admin/users.html', users=users)
 
+with app.app_context():
+    db.create_all()
+    if not User.query.filter_by(is_admin=True).first():
+        admin = User(
+            username='admin',
+            email='mansourjemli@gmail.com',
+            password_hash=generate_password_hash('admin123'),
+            is_admin=True
+        )
+        db.session.add(admin)
+        db.session.commit()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        if not User.query.filter_by(is_admin=True).first():
-            admin = User(
-                username='admin',
-                email='mansourjemli@gmail.com',
-                password_hash=generate_password_hash('admin123'),
-                is_admin=True
-            )
-            db.session.add(admin)
-            db.session.commit()
     app.run(debug=True, host='0.0.0.0', port=8000)
