@@ -15,13 +15,9 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
                     <select name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                         <option value="">Sélectionner...</option>
-                        <option value="Développement Web" {% if course and course.category == 'Développement Web' %}selected{% endif %}>Développement Web</option>
-                        <option value="Data Science" {% if course and course.category == 'Data Science' %}selected{% endif %}>Data Science</option>
-                        <option value="Design" {% if course and course.category == 'Design' %}selected{% endif %}>Design</option>
-                        <option value="Marketing" {% if course and course.category == 'Marketing' %}selected{% endif %}>Marketing</option>
-                        <option value="Business" {% if course and course.category == 'Business' %}selected{% endif %}>Business</option>
-                        <option value="Mobile" {% if course and course.category == 'Mobile' %}selected{% endif %}>Mobile</option>
-                        <option value="DevOps" {% if course and course.category == 'DevOps' %}selected{% endif %}>DevOps</option>
+                        <option value="Cours" {% if course and course.category == 'Cours' %}selected{% endif %}>Cours</option>
+                        <option value="Série d'exercices" {% if course and course.category == "Série d'exercices" %}selected{% endif %}>Série d'exercices</option>
+                        <option value="Examen" {% if course and course.category == 'Examen' %}selected{% endif %}>Examen</option>
                     </select>
                 </div>
                 <div>
