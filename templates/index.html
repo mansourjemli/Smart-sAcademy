@@ -59,7 +59,7 @@
                     <span class="text-xl font-bold text-indigo-600">
                         {% if course.price > 0 %}{{ course.price }}dt{% else %}Gratuit{% endif %}
                     </span>
-                    <a href="{{ url_for('course_detail', slug=course.slug) }}" class="bg-indigo-600 text-pink px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">Voir le cours</a>
+                    <a href="{{ url_for('course_detail', slug=course.slug) }}" class="bg-indigo-600 text-pink px-4 py-2 rounded-lg text-white hover:bg-indigo-700">Voir le cours</a>
                 </div>
             </div>
         </div>
