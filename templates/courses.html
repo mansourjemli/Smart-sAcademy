@@ -19,8 +19,12 @@
             <select name="level" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                 <option value="">Tous les niveaux</option>
                 <option value="Première année" {% if request.args.get('level') == 'Première année' %}selected{% endif %}>Première année</option>
-                <option value="Collège" {% if request.args.get('level') == 'Collège' %}selected{% endif %}>Collège</option>
-                <option value="Lycée" {% if request.args.get('level') == 'Lycée' %}selected{% endif %}>Lycée</option>
+                <option value="Deuxième Sciences" {% if request.args.get('level') == 'Deuxième Sciences' %}selected{% endif %}>Deuxième Sciences</option>
+                <option value="Deuxième Info" {% if request.args.get('level') == 'Deuxième Info' %}selected{% endif %}>Deuxième Info</option>
+                <option value="Troisième Math+Sc+Tech" {% if request.args.get('level') == 'Troisième Math+Sc+Tech' %}selected{% endif %}>Troisième Math+Sc+Tech</option>
+                <option value="Troisième Info" {% if request.args.get('level') == 'Troisième Info' %}selected{% endif %}>Troisième Info</option>
+                <option value="BAC Math+Sc+Tech" {% if request.args.get('level') == 'BAC Math+Sc+Tech' %}selected{% endif %}>BAC Math+Sc+Tech</option>
+                <option value="BAC Info" {% if request.args.get('level') == 'BAC Info' %}selected{% endif %}>BAC Info</option>
             </select>
             <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Filtrer</button>
         </div>
