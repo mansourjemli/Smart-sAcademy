@@ -12,9 +12,9 @@
             <input type="text" name="search" placeholder="Rechercher un cours..." value="{{ request.args.get('search', '') }}" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
             <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                 <option value="">Toutes les catégories</option>
-                <option value="web">Développement Web</option>
-                <option value="design">Design</option>
-                <option value="marketing">Marketing</option>
+                <option value="web">Cours</option>
+                <option value="design">Série d'exercices</option>
+                <option value="marketing">Examen</option>
                 
                 {% for cat in categories %}
                 <option value="{{ cat }}" {% if request.args.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
