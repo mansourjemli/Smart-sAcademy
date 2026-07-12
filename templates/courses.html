@@ -19,8 +19,8 @@
             <select name="level" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                 <option value="">Tous les niveaux</option>
                 <option value="Primaire" {% if request.args.get('level') == 'Primaire' %}selected{% endif %}>Primaire</option>
-                <option value="Collège" {% if request.args.get('level') == 'Collège' %}selected{% endif %}>Intermédiaire</option>
-                <option value="Lycée" {% if request.args.get('level') == 'Lycée' %}selected{% endif %}>Avancé</option>
+                <option value="Collège" {% if request.args.get('level') == 'Collège' %}selected{% endif %}>Collège</option>
+                <option value="Lycée" {% if request.args.get('level') == 'Lycée' %}selected{% endif %}>Lycée</option>
             </select>
             <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Filtrer</button>
         </div>
